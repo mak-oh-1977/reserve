@@ -1,0 +1,74 @@
+.container {
+  width: 100%;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.t-center {
+  text-align: center;
+}
+
+.float-clear {
+  clear: both;
+}
+
+input:focus, textarea:focus, select:focus {
+  background-color: #ffbbbb;
+}
+
+var {
+  font-style: normal;
+}
+
+.ui-datepicker {
+  font-size: 1.5em;
+}
+
+/* 日曜日のカラー設定 */
+
+td.ui-datepicker-week-end:first-child a.ui-state-default {
+  background-color: #ffecec;
+  /* 背景色を設定 */
+  color: #f00!important;
+  /* 文字色を設定 */
+}
+
+/* 土曜日のカラー設定 */
+
+td.ui-datepicker-week-end:last-child a.ui-state-default {
+  background-color: #eaeaff;
+  /* 背景色を設定 */
+  color: #00f!important;
+  /* 文字色を設定 */
+}
+
+.ui-datepicker {
+  font-size: 1.5em;
+}
+
+select.ui-datepicker-year {
+  color: #303030;
+}
+
+select.ui-datepicker-month {
+  color: #303030;
+}
+
+input.date_sel {
+  width: 100px;
+}
+
+h2 {
+  display: inline-block;
+  border-bottom: 5px solid rgba(237, 205, 31, 1);
+}
+
+pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -pre-wrap;
+  word-wrap: break-word;
+}

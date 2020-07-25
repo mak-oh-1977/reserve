@@ -1,0 +1,105 @@
+body {
+    background-image:url(../images/wall.png)
+}
+
+#navbar {
+    position:fixed;
+    width:100%;
+    top:0px; 
+    z-index:100;
+}
+
+.breadcrumb {
+    position:fixed;
+    width:100%;
+    top:40px;
+    z-index:50;
+}
+
+.container {
+    width: 100%;
+    margin:80px 0 0 0;
+    background-color:#fcfcfc;
+}
+
+.t-right {
+    text-align:right;
+}
+.t-center {
+    text-align:center;
+}
+
+div.clear {
+    clear:both;
+}
+
+.ui-datepicker {
+    font-size:1.5em;
+}
+
+/* 日曜日のカラー設定 */
+td.ui-datepicker-week-end:first-child a.ui-state-default{
+  background-color: #ffecec;   /* 背景色を設定 */
+  color: #f00!important;       /* 文字色を設定 */
+}
+/* 土曜日のカラー設定 */
+td.ui-datepicker-week-end:last-child a.ui-state-default{
+  background-color: #eaeaff;   /* 背景色を設定 */
+  color: #00f!important;       /* 文字色を設定 */
+}
+
+input.date_sel{
+    width:100px;
+}
+
+/* スクロールページでトップに戻る */
+#page-top{
+	width:50px;
+	height:50px;
+	display:none;
+	position:fixed;
+	right:16px;
+	bottom:16px;
+}
+ 
+#page-top p{
+	margin:0;
+	padding:0;
+	text-align:center;
+	background:#3636A1;
+	-webkit-transition:all 0.3s;
+	-moz-transition:all 0.3s;
+	transition:all 0.3s;
+	-webkit-border-radius: 5px;
+	   -moz-border-radius: 5px;
+	        border-radius: 5px;
+}
+ 
+#page-top p:hover{
+	background:#5353F4;
+}
+ 
+#move-page-top{
+	color:#fff;
+	line-height:50px;
+	text-decoration:none;
+	display:block;
+	cursor:pointer;
+}
+
+.container {
+    width: 100%;
+}
+
+
+.float-clear {
+	clear:both;
+}
+
+input:focus {
+	background-color: #ffbbbb;
+}
+
+var {
+    font-style:normal;
+}

@@ -1,0 +1,149 @@
+<?php
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  請求処理ＡＰＩ
+//
+class C000_common_api extends api
+{
+
+  //////////////////////////////////////////////////////////////////////////
+  //
+  //	ログイン
+  //
+  function login($res, $p)
+  {
+    $userID = $p["userID"];
+    $pass = $p["pass"];
+    if (strpos($_SERVER['SERVER_NAME'], 'reserve.com') === FALSE && strlen($userID) == 0) {
+      $a = file(__DIR__ . '/../../debug.txt');
+      $userID = trim(str_replace(PHP_EOL, '', $a[0]));
+      $pass = trim(str_replace(PHP_EOL, '', $a[1]));
+    }
+
+    $this->dbTrans();
+
+    $ret = $this->check_user_id($userID, $pass);
+    if ($ret['res'] != 'OK')
+      return $ret;
+
+    $ret = $this->get_user_info($userID, $ret['userDiv']);
+    if ($ret['res'] != 'OK')
+      return $ret;
+
+    $ret = $this->get_right_info($userID);
+    if ($ret['res'] != 'OK')
+      return $ret;
+
+    log::debug(print_r($_SERVER, TRUE));
+
+    $res['res'] = 'OK';
+    
+    $res['location'] = "./000_system/000_dashboard.php";
+
+
+
+    $this->dbCommit();
+
+    return $res;
+  }
+
+
+  //////////////////////////////////////////////////////////////////////////
+  //
+  //	アカウント確認
+  //
+  function check_user_id($id, $pass)
+  {
+    log::func($id);
+
+    if (strlen($id) > 0 && strlen($pass) > 0) {
+      $ip = $_SERVER["HTTP_X_REAL_IP"];
+
+      $res = $this->dbOne('select UserDiv from 010m_user where UserId = ? and Pass = ?', [$id, $pass]);
+      if ($res['value'] == '') {
+        $res['res'] = 'NG';
+        $res['msg'] = "ユーザID または パスワードが違います。";
+
+        log::info($res['msg'] . " {$id} {$ip}");
+
+        $this->OpeLog(api::OP_TYPE_SEL, "{$id} Login failure from {$ip}");
+
+        $this->dbCommit();
+
+        return $res;
+      }
+      log::debug(print_r($res, TRUE));
+
+      $res = ['res' => 'OK', 'userDiv' => $res['value']];
+    } else {
+      throw new AppException("ユーザID または パスワードが入力されていません。");
+    }
+
+    return $res;
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  //
+  //	ユーザー情報取得
+  //
+  function get_user_info($id, $div)
+  {
+    log::func("{$id}, {$div}");
+
+    $sql = "
+          Select
+              UserId, UserDiv, UserName, 
+              case when ExpireDate > now() then '' else ExpireDate end as ExpireDate
+          From
+              010m_user
+          Where
+              UserId = ?
+      ";
+
+    $ret = $this->dbSelect($sql, [$id]);
+
+
+    $row = $ret['rows'][0];
+    if (!$row) {
+      throw new AppException("ユーザID または パスワードが違います。");
+    }
+
+    $_SESSION = [];
+    //セッションに格納し、画面遷移
+    $_SESSION['userID']     = $row['UserId'];
+    $_SESSION['userDiv']     = $row['UserDiv'];
+    $_SESSION['userName']     = $row['UserName'];
+    $_SESSION['ExpireDate']   = $row['ExpireDate'];
+
+
+    return ['res' => 'OK'];
+  }
+  //////////////////////////////////////////////////////////////////////////
+  //
+  //	アカウント確認
+  //
+  function get_right_info($id)
+  {
+    $sql = "
+        SELECT f.FunctionId
+        FROM
+            010m_user u inner join 001m_role r on u.RoleId = r.RoleId
+                    inner join 002m_permission p on r.RoleId = p.RoleId
+                    inner join 003m_function f on p.FunctionId = f.FunctionId
+        where
+            UserId = ?
+    ";
+
+    $ret = $this->dbSelect($sql, [$id]);
+
+    $_SESSION['function'] = [];
+
+    foreach ($ret['rows'] as $r) {
+      $_SESSION['function'][] = $r['FunctionId'];
+    }
+    return $ret;
+  }
+
+
+}
