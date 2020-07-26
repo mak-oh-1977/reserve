@@ -60,7 +60,7 @@ $(document).ready(function(){
 
 //------------------------------------------------------------------------
 //
-// 検体登録
+// 登録
 //
 $("#regist").click(function(){
 	var parm = GetFromDom("#info");
