@@ -11,5 +11,6 @@ echo "allclear userdata";
 
 mysql -h $DB_HOST -u $DB_USER -p$DB_PASS analysis << EOS
 SET NAMES utf8;
-
+delete from 100t_shop;
+delete from 090t_ope_log;
 EOS
