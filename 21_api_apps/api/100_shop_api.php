@@ -73,13 +73,10 @@ class C100_shop_api extends api
 
     //検索条件
     if ($p['Pref'] != null) {
-      $query[] = "G.PrefCode = {$p['PrefCode']}";
-    }
-    if ($p['groupID'] != null) {
-      $query[] = "concat(G.COmpanyID, '/', G.GroupID) like '%" . $p['groupID'] . "%'";
+      $query[] = "s.PrefCode = {$p['PrefCode']}";
     }
     if ($p['text'] != null) {
-      $query[] = "concat(G.GroupName, Kana, G.Address1, G.Address2, G.Tel) collate utf8_unicode_ci Like '%" . $p['text'] . "%'";
+      $query[] = "concat(s.Name, Kana, s.Address1, s.Address2, s.Tel) collate utf8_unicode_ci Like '%" . $p['text'] . "%'";
     }
 
     if (count($query) > 0) {

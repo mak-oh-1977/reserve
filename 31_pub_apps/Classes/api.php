@@ -33,8 +33,6 @@ class api
 
   protected $userID;
   protected $userDiv;
-  protected $groupID;
-  protected $OpCompanyId;
   protected $sess;
 
   public function __construct($uid, $udiv, $gid, $ocid, $sess)
@@ -43,8 +41,6 @@ class api
 
     $this->userID = $uid;
     $this->userDiv = $udiv;
-    $this->groupID = $gid;
-    $this->OpCompanyId = $ocid;
     $this->sess = $sess;
   }
 

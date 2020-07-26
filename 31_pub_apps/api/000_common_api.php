@@ -113,13 +113,10 @@ class C000_common_api extends api
 
     $sql = "
         Select
-          U.UserId, U.UserDiv, U.ReqRegistFlg, U.UserName, '' CompanyName, U.GroupId,
-          case when U.ExpireDate > now() then '' else U.ExpireDate end as ExpireDate,
-          G.GroupName, G.GetGroupId, G.Version,
-          G.EnableFlg
+          U.UserId, U.UserDiv, U.UserName, 
+          case when U.ExpireDate > now() then '' else U.ExpireDate end as ExpireDate
         From
           032m_user AS U
-            inner Join 910m_group  AS G ON U.GroupID = G.GroupID
         Where
           U.UserID = ?
       ";
@@ -145,12 +142,7 @@ class C000_common_api extends api
     $_SESSION['userID']     = $row['UserId'];
     $_SESSION['userDiv']     = $row['UserDiv'];
     $_SESSION['userName']     = $row['UserName'];
-    $_SESSION['companyID']     = $row['CompanyId'];
-    $_SESSION['CompanyName']   = $row['CompanyName'];
-    $_SESSION['groupID']     = $row['GroupId'];
     $_SESSION['ExpireDate']   = $row['ExpireDate'];
-    $_SESSION['groupName']     = $row['GroupName'];
-    $_SESSION['GetGroupId']   = $row['GetGroupId'];
     $_SESSION['version']     = $row['Version'];
 
     log::debug(print_r($_SESSION, TRUE));

@@ -170,17 +170,6 @@
   //
   //
   //
-  $('input[name=groupID]').on('keypress', function(e) {
-    if (e.keyCode != 13)
-      return;
-
-    search();
-  });
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //
-  //
   function search(e) {
 
     $('#tbl-list').attr('offset', 0);

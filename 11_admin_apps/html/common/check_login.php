@@ -18,8 +18,6 @@ if ($_SERVER['HTTP_HOST'] != 'localhost')
     //     exit();
 
     // }
-    $groupID = $_SESSION['groupID'];
-    $getGroupID = $_SESSION['GetGroupId'];
 }
 
 ?>

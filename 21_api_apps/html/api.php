@@ -54,7 +54,6 @@ if ($parm['MOD'] == '000_common' && $parm['CMD'] == 'login') {
 
   $_SESSION['UserId'] = 'login';
   $_SESSION['userDiv'] = '0';
-  $_SESSION['groupID'] = '0';
 }
 
 
@@ -75,7 +74,7 @@ $cmd = $parm['CMD'];
 $res['res'] = 'NG';
 
 $class = "C" . $mod . "_api";
-$api = new $class($_SESSION['UserId'], $_SESSION['userDiv'], $_SESSION['groupID'], $_SESSION['OpCompanyId'], $_SESSION);
+$api = new $class($_SESSION['UserId'], $_SESSION['userDiv'], "", $_SESSION['OpCompanyId'], $_SESSION);
 
 if ($parm['LOG'] == true)
   log::api($class . ":" . $cmd, $parm);

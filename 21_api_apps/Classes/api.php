@@ -32,7 +32,6 @@ class api
 
   protected $user_id;
   protected $userDiv;
-  protected $groupID;
   protected $OpCompanyId;
   protected $sess;
 
@@ -42,7 +41,6 @@ class api
 
     $this->user_id = $uid;
     $this->userDiv = $udiv;
-    $this->groupID = $gid;
     $this->OpCompanyId = $ocid;
     $this->sess = $sess;
   }

@@ -27,7 +27,7 @@
 
           <div class="card card-info card-tabs">
             <div class="card-header p-0 pt-1">
-              <input type="hidden" id="GroupId">
+              <input type="hidden" id="StaffId">
               <ul class="nav nav-tabs" role="tablist" id="kind">
                 <li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" href="#tabs-1" idx=1>基本情報</a></li>
               </ul>
