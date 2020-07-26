@@ -25,8 +25,8 @@
         <div class="panel-body">
           <form action="" method="POST" name="login">
             <div class="form-group" align="left">
-              <label>ユーザＩＤ</label>
-              <input type="text" name="userID" class="form-control" style="ime-mode:disabled" maxlength="12" autofocus />
+              <label>ログインＩＤ</label>
+              <input type="text" name="LoginId" class="form-control" style="ime-mode:disabled" maxlength="12" autofocus />
             </div>
             <div class="form-group" align="left">
               <label>パスワード</label>
@@ -59,7 +59,7 @@
 
   function login() {
     var p = GetFromDom("form[name=login]");
-    Api('000_common', 'login', p,
+    Api('000_common/login', p,
       function(ret) {
         location.href = ret['location'];
       },

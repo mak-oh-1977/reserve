@@ -11,7 +11,7 @@ services:
     env_file:
       - debug.env
     ports:
-      - 3306:3306
+      - 8306:3306
     restart: always
 
     networks:
@@ -149,10 +149,10 @@ services:
       - reserve
 
     ports:
-      - 8080:80
-      - 8443:443
-      - 8081:8081
-      - 9000:9000
+      - 9080:80
+      - 9443:443
+      - 9081:8081
+      - 9999:9000
     restart: always
 
 volumes:

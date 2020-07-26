@@ -3,17 +3,17 @@
 //
 //
 //
-function Api(mod, cmd, param, ok_cb, ng_cb) {
+function Api(mod_cmd, param, ok_cb, ng_cb) {
   //	ShowMsg(msg,"サーバー処理中です。。。", true);
   var p = {};
-  p['MOD'] = mod;
-  p['CMD'] = cmd;
+  p['MOD'] = mod_cmd.split('/')[0];
+  p['CMD'] = mod_cmd.split('/')[1];
   p['JOB'] = false;
   p['LOG'] = true;
   p['param'] = param;
 
   $.ajax({
-    url: "/api/",
+    url: "/api/" + mod_cmd + "/",
     type: 'post',
     dataType: 'json',
     data: JSON.stringify(p),

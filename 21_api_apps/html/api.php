@@ -38,8 +38,8 @@ if (!isset($parm["MOD"])) {
 
 if ($parm['MOD'] != '000_common' && $parm['MOD'] != 'login' && $_SERVER['HTTP_HOST'] != 'localhost') {
 
-  if (!isset($_SESSION['userName'])) {
-    log::error("login error", $_SESSION['userName']);
+  if (!isset($_SESSION['UserName'])) {
+    log::error("login error", $_SESSION['UserName']);
 
     $res['res'] = 'TO';
     SendResponse($res);
@@ -52,7 +52,7 @@ if ($parm['MOD'] == '000_common' && $parm['CMD'] == 'login') {
   session_destroy();
   session_start();
 
-  $_SESSION['userID'] = 'login';
+  $_SESSION['UserId'] = 'login';
   $_SESSION['userDiv'] = '0';
   $_SESSION['groupID'] = '0';
 }
@@ -75,7 +75,7 @@ $cmd = $parm['CMD'];
 $res['res'] = 'NG';
 
 $class = "C" . $mod . "_api";
-$api = new $class($_SESSION['userID'], $_SESSION['userDiv'], $_SESSION['groupID'], $_SESSION['OpCompanyId'], $_SESSION);
+$api = new $class($_SESSION['UserId'], $_SESSION['userDiv'], $_SESSION['groupID'], $_SESSION['OpCompanyId'], $_SESSION);
 
 if ($parm['LOG'] == true)
   log::api($class . ":" . $cmd, $parm);

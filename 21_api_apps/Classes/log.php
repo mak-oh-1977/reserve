@@ -62,7 +62,7 @@ class Log{
         $datetime = self::getDateTime();
         $date = self::getDate();
 
-        $logfile = "app_" . $_SESSION['userID'] . ".log";
+        $logfile = "app_" . $_SESSION['UserId'] . ".log";
         $file_name = "/var/log/httpd/" . $logfile;
 
         $file = substr($file, strlen("/var/www/html"));
@@ -79,7 +79,7 @@ class Log{
         $datetime = self::getDateTime();
         $date = self::getDate();
 
-        $logfile = "app_" . $_SESSION['userID'] . "_sql.log";
+        $logfile = "app_" . $_SESSION['UserId'] . "_sql.log";
         $file_name = "/var/log/httpd/" . $logfile;
 
         $file = substr($file, strlen("/var/www/html"));

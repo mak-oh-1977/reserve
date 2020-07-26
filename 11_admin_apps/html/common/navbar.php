@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$userName = $_SESSION['userName'];
+$userName = $_SESSION['UserName'];
 $function = $_SESSION['function'];
 
 ?>
@@ -87,7 +87,7 @@ $function = $_SESSION['function'];
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="../900_shop/900_shop.php" class="nav-link">
+              <a href="../100_shop/100_shop.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>店舗一覧</p>
               </a>

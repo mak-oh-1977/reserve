@@ -30,7 +30,7 @@ class api
   private $DB;
   private $fetch_type;
 
-  protected $userID;
+  protected $user_id;
   protected $userDiv;
   protected $groupID;
   protected $OpCompanyId;
@@ -40,7 +40,7 @@ class api
   {
     $this->open();
 
-    $this->userID = $uid;
+    $this->user_id = $uid;
     $this->userDiv = $udiv;
     $this->groupID = $gid;
     $this->OpCompanyId = $ocid;
@@ -236,7 +236,7 @@ class api
     $sql = "insert into 090t_ope_log (OpeDate, OpeUser, Type, detail) values(now(), ?, ?, ?)";
 
     if (isset($_SESSION))
-      $user = $_SESSION['userID'];
+      $user = $this->user_id;
     else
       $user = 'system';
 
@@ -257,25 +257,6 @@ class api
     return true;
   }
 
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  // APIに対してJSONをPOST送信し返り値を取得する
-  //
-  // @param string $url
-  // @param array $postParams
-  // @return array
-  //
-  protected function callPdfSrv($mod, $cmd, $parm)
-  {
-    $p = [
-      'MOD' => $mod, 'CMD' => $cmd, "USER" => $this->userID,
-      "JOB" => false, 'LOG' => true, 'param' => $parm
-    ];
-
-    $h = getenv('PDF_HOST');
-    return $this->sendApi("http://{$h}/api.php", $p);
-  }
 
   //////////////////////////////////////////////////////////////////////////
   //
@@ -342,58 +323,6 @@ class api
     log::debug(print_r($res, TRUE));
 
     return $res;
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  // chatworkに通知
-  //
-  // @param string $url
-  // @param array $postParams
-  // @return array
-  //
-  public function ChatSend($msg)
-  {
-    $sql = "
-        insert into 040t_int_msg (UserId, UserName, Msg) 
-        values (?, ?, ?)
-        ";
-    $ret = $this->dbExec($sql, ["daekky", "だえっきー", $msg]);
-
-    $room = getenv('CHAT_ROOM');
-    if ($room == "")
-      return;
-
-    $url = "https://api.chatwork.com/v2/rooms/{$room}/messages";
-
-    log::debug($url);
-
-    // POSTデータ
-    $data = array(
-      "body" => $msg,
-    );
-    $data = http_build_query($data, "", "&");
-
-    // header
-    $header = [
-      "X-ChatWorkToken: " . getenv("CHAT_TOKEN"),
-      "Content-Type: application/x-www-form-urlencoded",
-      "Content-Length: " . strlen($data)
-    ];
-
-    $context = array(
-      "http" => array(
-        "method"  => "POST",
-        "header"  => implode("\r\n", $header),
-        "content" => $data
-      )
-    );
-
-    $html = file_get_contents($url, false, stream_context_create($context));
-
-    log::debug($html);
-
-    return $html;
   }
 
 
