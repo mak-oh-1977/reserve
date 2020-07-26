@@ -1,4 +1,4 @@
-﻿<?php include_once(__DIR__ . '/../common/common_head.php'); ?>
+<?php include_once(__DIR__ . '/../common/common_head.php'); ?>
 
 <style type="text/css">
 </style>
@@ -11,7 +11,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">店舗一覧</h1>
+          <h1 class="m-0 text-dark">スタッフ一覧</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         </div><!-- /.col -->
@@ -36,38 +36,13 @@
                 <div class="col-lg-9" id="query">
 
                   <div class="row">
-                    <div class="col-lg-2">
-                      <div class="form-group">
-                        <label class="col-form-label-sm">店舗ID</label>
-                        <input type="tel" name="ShopId" class="form-control form-control-sm">
-                      </div>
-                    </div>
-                    <div class="col-lg-2">
-                      <div class="form-group">
-                        <label class="col-form-label-sm">都道府県</label>
-                        <select name="PrefCode" class="form-control form-control-sm">
-                          <option value=""></option>
-                        </select>
-                      </div>
-                    </div>
                     <div class="col-lg-3">
                       <div class="form-group">
-                        <label class="col-form-label-sm">店舗名/カナ/住所/Tel</label>
+                        <label class="col-form-label-sm">氏名</label>
                         <input type="text" name="text" class="form-control form-control-sm">
                       </div>
                     </div>
-                    <div class="col-lg-2">
-                      <div class="form-group">
-                        <label class="col-form-label-sm">運用状態</label>
-                        <select name="EnableFlg" class="form-control form-control-sm">
-                          <option value=""></option>
-                          <option value="0">停止中</option>
-                          <option value="1" selected>運用中</option>
-                        </select>
-                      </div>
-                    </div>
                   </div>
-
 
                 </div>
                 <div class="col-lg-3 d-flex align-items-end">
@@ -99,19 +74,16 @@
                 <th>
                   <div class="row">
                     <div class="col-sm-1 th">
-                      店舗ID
+                      スタッフID
                     </div>
                     <div class="col-sm-2 th">
-                      名称
+                      氏名
                     </div>
                     <div class="col-sm-3 th">
-                      住所
-                    </div>
-                    <div class="col-sm-3 th">
-                      電話番号/e-mail/Hp
+                      電話番号/メール
                     </div>
                     <div class="col-sm-1 th">
-                      契約日
+                      入店日
                     </div>
                     <div class="col-sm-1 th">
                       更新者/更新日時
@@ -127,18 +99,11 @@
                 <td>
                   <div class="row">
                     <div class="col-sm-1 detail">
-                      <span name="ShopId"></span><br>
+                      <span name="StaffId"></span><br>
 
                     </div>
                     <div class="col-sm-2 detail">
                       <span name="Name"></span><br>
-                    </div>
-                    <div class="col-sm-3">
-                      <a class="map" target="_blank">
-                        〒<span name="Post"></span><br>
-                        <span name="Address1"></span><br>
-                        <span name="Address2"></span><br>
-                      </a>
                     </div>
                     <div class="col-sm-3">
                       <span name="Tel"></span><br>
@@ -153,7 +118,7 @@
                       <span name="UpdDateTime"></span><br>
                     </div>
                     <div class="col-sm-1">
-                      <button name="staff" class="btn btn-info btn-md"><i class="fas fa-people"></i>スタッフ</button>
+                      <button name="staff" class="btn btn-info btn-md"><i class="fas fa-people"></i>シフト</button>
                     </div>
                     <div class="col-sm-12" style="background-color:#EFFBF8">
                       <span name="Memo"></span>
@@ -171,30 +136,14 @@
 
         </div>
       </div>
-  </content>
+    </div>
 
 </div>
 
+
 <?php include_once(__DIR__ . '/../common/common_footer.php'); ?>
 
-
 <script type="text/javascript">
-  $('.pickDate').datepicker({
-    dateFormat: "yy/mm/dd",
-    language: "ja",
-    autoclose: true,
-    orientation: "bottom auto",
-    endDate: Date(),
-    todayHighlight: true,
-    numberOfMonths: 1,
-    beforeShow: function() {
-      setTimeout(function() {
-        $('.ui-datepicker').css('z-index', 99999999999999);
-      }, 0);
-    }
-  });
-
-
   //////////////////////////////////////////////////////////////////
   //
   //
@@ -203,28 +152,10 @@
 
     $('#tbl-list').attr('offset', 0);
 
-    init_list_box()
-
     tbl_list();
 
   });
 
-  //------------------------------------------------------------------------
-  //
-  //  検体一覧表示
-  //
-  function init_list_box() {
-
-    Api('100_shop/init_item', null,
-      function(ret) {
-        $.each(ret['pref'], function(index, value) {
-          $opt = $('<option>').text(value['Value']).val(value['Code']);
-          $('select[name=PrefCode]').append($opt);
-        });
-      }
-    );
-
-  }
 
   //////////////////////////////////////////////////////////////////////////
   //
@@ -282,7 +213,7 @@
   //  新規ボタン押下
   //
   $("button[name='new']").click(function() {
-    window.open("./101_shop_d.php?OpCompanyId=" + $('select[name=OpCompanyId]').val());
+    window.open("./111_staff_d.php?shop_id=" + getParm('shop_id'));
     return false;
   })
 
@@ -305,7 +236,7 @@
     if (offset <= 0)
       $('#tbl-list tbody').empty();
 
-    Api('100_shop/shop_list', p,
+    Api('110_staff/staff_list', p,
       function(ret) {
 
         var cnt = ret['rows'].length;
@@ -315,17 +246,9 @@
 
         $.each(ret['rows'], function(index, r) {
           var $tr = $('#tbl-list thead tr:nth-child(2)').clone();
-          $tr.attr('ShopId', r['ShopId']);
+          $tr.attr('StaffId', r['StaffId']);
 
           SetToDom($tr, r);
-
-          $($tr).find('a.map').attr('href', r['MapUrl']);
-          if (r['Url'] != '') {
-            $($tr).find('a.hp').attr('href', r['Url']);
-            $($tr).find('a.hp span').text('HP');
-          } else {
-            $($tr).find('a.hp').remove();
-          }
 
           $('#tbl-list tbody').append($tr);
 
@@ -395,8 +318,8 @@
   //
   $(document).on('click', '#tbl-list div.detail', function() {
 
-    var id = $(this).closest('tr').attr('ShopId')
-    window.open("../100_shop/101_shop_d.php?shop_id=" + id, '_blank');
+    var id = $(this).closest('tr').attr('StaffId')
+    window.open("../100_shop/111_staff_d.php?staff_id=" + id, '_blank');
 
   })
 
@@ -406,11 +329,12 @@
   //
   $('#tbl-list').on("click", "button[name=staff]", function() {
     var id = $(this).closest('tr').attr('ShopId')
-    window.open("110_staff.php?shop_id=" + id, '_blank');
+    window.open("102_staff.php?shop_id=" + id, '_blank');
 
 
   });
 </script>
+
 
 
 </body>

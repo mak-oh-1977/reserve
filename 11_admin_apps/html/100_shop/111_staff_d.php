@@ -11,7 +11,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">店舗情報</h1>
+          <h1 class="m-0 text-dark">スタッフ情報</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
         </div><!-- /.col -->
@@ -49,8 +49,8 @@
                           <div class="form-group">
                             <label>状態</label>
                             <select name="Status" class="form-control">
-                              <option value="0">停止中</option>
-                              <option value="1" selected>運用中</option>
+                              <option value="0">退店</option>
+                              <option value="1" selected>入店</option>
                             </select>
                           </div>
 
@@ -58,9 +58,13 @@
                             <label>店舗ID</label>
                             <input type="tel" name="ShopId" class="form-control" maxlength="20" readonly>
                           </div>
+                          <div class="form-group">
+                            <label>スタッフID</label>
+                            <input type="tel" name="StaffId" class="form-control" maxlength="20" readonly>
+                          </div>
 
                           <div class="form-group">
-                            <label>店舗名</label>
+                            <label>氏名</label>
                             <input type="text" name="Name" class="form-control">
                           </div>
 
@@ -74,28 +78,11 @@
                           <h3 class="card-title">連絡先</h3>
                         </div>
                         <div class="card-body">
-                          <div class="form-group">
-                            <label>郵便番号</label>
-
-                            <div class="input-group">
-                              <input type="tel" name="Post" class="form-control" maxlength="8">
-                              <span class="input-group-append">
-                                <button type="button" id="zipsearch" class="btn btn-info">検索</button>
-                              </span>
-                            </div>
-                          </div>
-
-                          <div class="form-group zip-search">
-                            <label>都道府県</label>
-                            <select name="PrefCode" class="form-control form-control-sm">
-                            </select>
-                          </div>
 
                           <div class="form-group zip-search">
                             <label>住所</label>
                             <!-- <td class="tips" title="契約書にそのまま出力されます" colspan="2"> -->
-                            <input type="text" name="Address1" class="form-control">
-                            <input type="text" name="Address2" class="form-control" placeholder="建物名等">
+                            <input type="text" name="Address" class="form-control">
                           </div>
 
                           <div class="form-group">
@@ -106,16 +93,6 @@
                           <div class="form-group">
                             <label>E-mail</label>
                             <input type="tel" name="Email" class="form-control">
-                          </div>
-                          <div class="form-group">
-                            <label>URL</label>
-
-                            <div class="input-group">
-                              <input type="tel" name="Url" class="form-control">
-                              <span class="input-group-append">
-                                <button type="button" id="hpopen" class="btn btn-info">確認</button>
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -128,7 +105,7 @@
                         </div>
                         <div class="card-body">
                           <div class="form-group">
-                            <label>営業時間・休日</label>
+                            <label>出勤予定</label>
 
                             <div class="input-group">
                               <input type="text" name="InService" class="form-control">
@@ -169,41 +146,27 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
+    if (getParm('staff_id') != "") {
+      detail_data(getParm('staff_id'));
+    }
+    else
+    {
+      $('#tabs-1 input[name=ShopId]').val(getParm('shop_id'));
+    }
 
-    get_item_values();
 
   });
-  //------------------------------------------------------------------------
-  //
-  //*	各項目の値を取得
-  //
-  function get_item_values() {
-    Api('100_shop/shop_detail_item', null,
-      function(ret) {
-
-        $.each(ret['pref'], function(index, value) {
-          $opt = $('<option>').text(value['Value']).val(value['Code']);
-          $('select[name=PrefCode]').append($opt);
-        });
-
-        if (getParm('shop_id') != "") {
-          detail_data(getParm('shop_id'));
-        }
-      }
-    );
-
-  }
 
   //------------------------------------------------------------------------
   //
   //*	値取得
   //
-  function detail_data(shop_id) {
+  function detail_data(staff_id) {
     var param = {
-      ShopId: shop_id,
+      StaffId: staff_id,
     };
 
-    Api('100_shop/shop_detail', param,
+    Api('110_staff/staff_detail', param,
       function(ret) {
 
         SetToDom('#tabs-1', ret);
@@ -212,41 +175,24 @@
     );
   }
 
-  //------------------------------------------------------------------------
-  //
-  //*	郵便番号から住所検索
-  //
-  $('#zipsearch').click(function() {
-
-    var p = {
-      'zipcode': $('#tabs-1 input[name=Post]').val()
-    }
-    Api('100_shop/get_address_by_zip', p,
-      function(ret) {
-        SetToDom('#tabs-1', ret);
-      }
-    );
-
-  })
 
   //------------------------------------------------------------------------
   //
   //登録ボタンクリック
   //
   $('#save').click(function() {
-    confirmDlg("店舗情報", "登録しますか？",
+    confirmDlg("スタッフ情報", "登録しますか？",
       function() {
 
         var param = {};
         param = GetFromDom('#tabs-1');
-        param['Ken'] = $('#tabs-1 :input[name=PrefCode] option:selected').text();
 
-        Api('100_shop/shop_save', param,
+        Api('110_staff/staff_save', param,
           function(ret) {
 
-            $('#ShopId').val(ret['ShopId']);
+            $('#StaffId').val(ret['StaffId']);
             alertDlg('保存', '保存しました', function() {
-              history.replaceState('', '', "/100_shop/101_shop_d.php?shop_id=" + ret['ShopId'])
+              history.replaceState('', '', "/100_shop/111_staff_d.php?staff_id=" + ret['StaffId'])
 
             });
           }
@@ -275,11 +221,11 @@
 
     var p = GetFromDom("#tabs-1");
 
-    Api('100_shop/delete_check', p,
+    Api('110_staff/delete_check', p,
       function(ret) {
-        confirmDlg("店舗情報", "削除します、よろしいですか？",
+        confirmDlg("スタッフ情報", "削除します、よろしいですか？",
           function() {
-            Api('100_shop/delete_shop', p,
+            Api('110_staff/delete_sstaff', p,
               function(ret) {
                 alertDlg("削除", "完了しました。", function() {
                   window.close();
