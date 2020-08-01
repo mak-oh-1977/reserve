@@ -22,8 +22,8 @@ jobs:
       - name: ls -a via ssh
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: ls -a
+          command: cd reserve && git pull
           host: ${{ secrets.HOST }}
-          username: garygrossgarten
+          username: ec2-user
           passphrase: ${{ secrets.PASSPHRASE }}
           privateKey: ${{ secrets.PRIVATE_KEY}}
