@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css">
-  <title>予約くん</title>
+  <title>yoyakun!</title>
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./css/bootstrap.min.css">
   <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
@@ -19,7 +19,7 @@
       <div class="panel panel-success" style="margin-left:20px; margin-right:20px">
         <div class="panel-heading">
           <center>
-            <h4>予約くん</h4>
+            <h4>yoyakun!</h4>
           </center>
         </div>
         <div class="panel-body">
