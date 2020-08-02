@@ -22,7 +22,7 @@ jobs:
       - name: ls -a via ssh
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: cd reserve && git pull && docker-compose down & docker-compose build & docker-compose up -d
+          command: update.sh
           host: ${{ secrets.HOST }}
           username: ec2-user
           passphrase: ${{ secrets.PASSPHRASE }}
