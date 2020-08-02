@@ -1,7 +1,7 @@
 server {
     server_name  yoyakun.work;
-    listen       80;
-    listen       443 ssl;
+    listen       8080;
+    listen       8443 ssl;
 
     ssl_certificate      /etc/letsencrypt/live/yoyakun.work/fullchain.pem;
     ssl_certificate_key  /etc/letsencrypt/live/yoyakun.work/privkey.pem;

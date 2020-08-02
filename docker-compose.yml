@@ -149,8 +149,8 @@ services:
       - reserve
 
     ports:
-      - 80:80
-      - 443:443
+      - 80:8080
+      - 443:8443
       - 9081:8081
       - 9999:9000
     restart: always
