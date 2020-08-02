@@ -141,7 +141,7 @@ services:
       - debug
       - phpmyadmin
     volumes:
-      - ./proxy-local.conf:/etc/nginx/conf.d/default.conf
+      - ./proxy/:/etc/nginx/conf.d/
       - ./60_encrypt:/etc/encrypt
       - ./90_log/proxy:/var/log/nginx
 
@@ -149,8 +149,8 @@ services:
       - reserve
 
     ports:
-      - 9080:80
-      - 9443:443
+      - 80:80
+      - 443:443
       - 9081:8081
       - 9999:9000
     restart: always
