@@ -1,4 +1,3 @@
-
 server {
     server_name  yoyakun.work;
     listen       80;
@@ -31,10 +30,14 @@ server {
 
     error_page 400 401 403 404 500 501 502 503 /sleeping.html;
 
+    location ^~ /api/ {
+       rewrite ^/api/ /api.php break;
+       proxy_pass http://reserve-api:80;
+    }
+
     location / {
-       proxy_pass http://reserve-pub;
-       proxy_intercept_errors on;
-     }
+       proxy_pass http://reserve-admin:80;
+    }
 
 }
 

@@ -56,7 +56,7 @@ services:
   admin:
     build: ./10_admin_httpd
     container_name: "reserve-admin"
-    hostname: "reserve.com"
+    hostname: "yoyaku.work"
     env_file:
       - debug.env
     volumes:
