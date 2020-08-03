@@ -22,7 +22,7 @@ jobs:
       - name: ls -a via ssh
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: update.sh
+          command: ./update.sh
           host: ${{ secrets.HOST }}
           username: ec2-user
           passphrase: ${{ secrets.PASSPHRASE }}
