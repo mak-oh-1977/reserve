@@ -1,0 +1,165 @@
+version: "3.3"
+
+services:
+  db:
+    build: ./00_db
+    container_name: "reserve-db"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./01_db_init:/docker-entrypoint-initdb.d
+      - ./90_log/db:/var/log/mysql
+    env_file:
+      - prod.env
+    ports:
+      - 8306:3306
+    restart: always
+
+    networks:
+      - reserve
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "reserve-phpmyadmin"
+    env_file:
+      - prod.env
+    networks:
+      - reserve
+    restart: always
+
+    depends_on:
+      - db
+
+  #セッション管理サーバ
+  web-session:
+    image: "redis:latest"
+    container_name: "reserve-session"
+    volumes:
+      - session_data:/data
+
+    networks:
+      - reserve
+
+    restart: always
+
+  smtp:
+    build: ./70_smtp
+    container_name: "reserve-smtp"
+    env_file:
+      - prod.env
+    networks:
+      - reserve
+    restart: always
+
+    depends_on:
+      - db
+
+  admin:
+    build: ./10_admin_httpd
+    container_name: "reserve-admin"
+    hostname: "yoyakun.work"
+    env_file:
+      - prod.env
+    volumes:
+      - ./11_admin_apps/:/var/www/
+      - ./staff-debug.txt:/var/debug.txt
+      - ./90_log/admin:/var/log/httpd
+
+    networks:
+      - reserve
+
+    restart: always
+
+    depends_on:
+      - web-session
+      - db
+
+  api:
+    build: ./20_api_httpd
+    container_name: "reserve-api"
+    hostname: "yoyakun.work"
+    env_file:
+      - prod.env
+    volumes:
+      - ./21_api_apps/:/var/www/
+      - ./staff-debug.txt:/var/debug.txt
+      - ./90_log/api:/var/log/httpd
+
+    networks:
+      - reserve
+
+    restart: always
+
+    depends_on:
+      - web-session
+      - db
+
+  pub:
+    build: ./30_pub_httpd
+    container_name: "reserve-pub"
+    hostname: "yoyakun.xyz"
+    env_file:
+      - prod.env
+    volumes:
+      - ./31_pub_apps/:/var/www/
+      - ./90_log/pub:/var/log/httpd
+
+    networks:
+      - reserve
+
+    restart: always
+
+    depends_on:
+      - web-session
+      - db
+
+
+  debug:
+    build: ./80_test
+    container_name: "reserve-debug"
+    networks:
+      - reserve
+    env_file:
+      - prod.env
+    volumes:
+      - ./81_script:/root/script
+      - ./90_log/test:/root/log
+      - ./02_db_tool:/root/db
+    depends_on:
+      - admin
+    tty: true
+    restart: always
+    privileged: true
+
+  #リバースプロキシ
+  proxy:
+    image: nginx:latest
+    container_name: "reserve-px"
+    env_file:
+      - prod.env
+    depends_on:
+      - admin
+      - debug
+      - phpmyadmin
+    volumes:
+      - ./proxy/:/etc/nginx/conf.d/
+      - /etc/letsencrypt:/etc/nginx/certs:ro
+      - ./60_encrypt:/etc/encrypt
+      - ./90_log/proxy:/var/log/nginx
+
+    networks:
+      - reserve
+
+    ports:
+      - 80:8080
+      - 443:8443
+      - 9081:8081
+      - 9999:9000
+    restart: always
+
+volumes:
+  db_data:
+  session_data:
+
+networks:
+  reserve:
+    
