@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . "/../Classes/PHPExcel.php";
-require_once __DIR__ . "/../Classes/PHPExcel/IOFactory.php";
 
 //////////////////////////////////////////////////////////////////////////
 //

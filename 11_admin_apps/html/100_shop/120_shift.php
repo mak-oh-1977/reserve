@@ -1,7 +1,14 @@
 <?php include_once(__DIR__ . '/../common/common_head.php'); ?>
 
+<!-- fullCalendar -->
+<link rel="stylesheet" href="../plugins/fullcalendar/main.min.css">
+<link rel="stylesheet" href="../plugins/fullcalendar-daygrid/main.min.css">
+<link rel="stylesheet" href="../plugins/fullcalendar-timegrid/main.min.css">
+<link rel="stylesheet" href="../plugins/fullcalendar-bootstrap/main.min.css">
+
 <style type="text/css">
 </style>
+
 
 <?php include(__DIR__ . "/../common/common_body.php"); ?>
 
@@ -23,125 +30,89 @@
   <content>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">絞り込み条件を指定</h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+        <div class="col-md-3">
+          <div class="sticky-top mb-3">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Draggable Events</h4>
               </div>
+              <div class="card-body">
+                <!-- the events -->
+                <div id="external-events">
+                  <div class="external-event bg-success">Lunch</div>
+                  <div class="external-event bg-warning">Go home</div>
+                  <div class="external-event bg-info">Do homework</div>
+                  <div class="external-event bg-primary">Work on UI design</div>
+                  <div class="external-event bg-danger">Sleep tight</div>
+                  <div class="checkbox">
+                    <label for="drop-remove">
+                      <input type="checkbox" id="drop-remove">
+                      remove after drop
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-9" id="query">
-
-                  <div class="row">
-                    <div class="col-lg-3">
-                      <div class="form-group">
-                        <label class="col-form-label-sm">氏名</label>
-                        <input type="text" name="text" class="form-control form-control-sm">
-                      </div>
-                    </div>
-                  </div>
-
+            <!-- /.card -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Create Event</h3>
+              </div>
+              <div class="card-body">
+                <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                  <!--<button type="button" id="color-chooser-btn" class="btn btn-info btn-block dropdown-toggle" data-toggle="dropdown">Color <span class="caret"></span></button>-->
+                  <ul class="fc-color-picker" id="color-chooser">
+                    <li><a class="text-primary" href="#"><i class="fas fa-square"></i></a></li>
+                    <li><a class="text-warning" href="#"><i class="fas fa-square"></i></a></li>
+                    <li><a class="text-success" href="#"><i class="fas fa-square"></i></a></li>
+                    <li><a class="text-danger" href="#"><i class="fas fa-square"></i></a></li>
+                    <li><a class="text-muted" href="#"><i class="fas fa-square"></i></a></li>
+                  </ul>
                 </div>
-                <div class="col-lg-3 d-flex align-items-end">
-                  <div class="box">
-                    <br><button name="search" class="btn btn-info btn-lg"><i class="fas fa-filter"></i>絞込</button>
-                    <button name="clear" class="btn btn-secondary btn-lg"><i class="fas fa-eraser"></i>クリア</button>
-                  </div>
-                </div>
+                <!-- /btn-group -->
+                <div class="input-group">
+                  <input id="new-event" type="text" class="form-control" placeholder="Event Title">
 
+                  <div class="input-group-append">
+                    <button id="add-new-event" type="button" class="btn btn-primary">Add</button>
+                  </div>
+                  <!-- /btn-group -->
+                </div>
+                <!-- /input-group -->
               </div>
             </div>
           </div>
         </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="card card-primary">
+            <div class="card-body p-0">
+              <!-- THE CALENDAR -->
+              <div id="calendar"></div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
       </div>
     </div>
   </content>
-  <content>
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-          <p style="float:left"><span id="list_cnt"></span>件</p>
-          <button name="new" class="btn btn-success btn-md" style="float:right"><i class="fas fa-plus"></i>新規登録</button>
-        </div>
-        <div class="card-body table-responsive p-0" id="list-base">
-
-          <table class="table table-hover table-head-fixed" id="tbl-list">
-            <thead>
-              <tr>
-                <th>
-                  <div class="row">
-                    <div class="col-sm-1 th">
-                      スタッフID
-                    </div>
-                    <div class="col-sm-2 th">
-                      氏名
-                    </div>
-                    <div class="col-sm-3 th">
-                      電話番号/メール
-                    </div>
-                    <div class="col-sm-1 th">
-                      入店日
-                    </div>
-                    <div class="col-sm-1 th">
-                      更新者/更新日時
-                    </div>
-                    <div class="col-sm-1 th">
-                    </div>
-
-                  </div>
-
-                </th>
-              </tr>
-              <tr style="display:none">
-                <td>
-                  <div class="row">
-                    <div class="col-sm-1 detail">
-                      <span name="StaffId"></span><br>
-
-                    </div>
-                    <div class="col-sm-2 detail">
-                      <span name="Name"></span><br>
-                    </div>
-                    <div class="col-sm-3">
-                      <span name="Tel"></span><br>
-                      <span name="Email"></span><br><br>
-                      <a class="Url" target="_blank"><span></span></a>
-                    </div>
-                    <div class="col-sm-1">
-                      <span name="Start"></span><br>
-                    </div>
-                    <div class="col-sm-1">
-                      <span name="UpdUserName"></span><br>
-                      <span name="UpdDateTime"></span><br>
-                    </div>
-                    <div class="col-sm-1">
-                      <button name="staff" class="btn btn-info btn-md"><i class="fas fa-people"></i>シフト</button>
-                    </div>
-                    <div class="col-sm-12" style="background-color:#EFFBF8">
-                      <span name="Memo"></span>
-                    </div>
-
-                  </div>
-
-                </td>
-
-              </tr>
-
-            </thead>
-            <tbody></tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
-
 </div>
 
 
 <?php include_once(__DIR__ . '/../common/common_footer.php'); ?>
+
+<!-- fullCalendar 2.2.5 -->
+<script src="../plugins/moment/moment.min.js"></script>
+<script src="../plugins/fullcalendar/main.min.js"></script>
+<script src="../plugins/fullcalendar-daygrid/main.min.js"></script>
+<script src="../plugins/fullcalendar-timegrid/main.min.js"></script>
+<script src="../plugins/fullcalendar-interaction/main.min.js"></script>
+<script src="../plugins/fullcalendar-bootstrap/main.min.js"></script>
+<!-- Page specific script -->
+<script src='../plugins/fullcalendar/locales/ja.js'></script>
 
 <script type="text/javascript">
   //////////////////////////////////////////////////////////////////
@@ -149,177 +120,201 @@
   //
   //
   $(document).ready(function() {
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function() {
 
-    $('#tbl-list').attr('offset', 0);
-
-    tbl_list();
-
-  });
-
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	検索
-  //
-  $('button[name=search]').click(function() {
-    search();
-
-  })
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //
-  //
-  function search(e) {
-
-    $('#tbl-list').attr('offset', 0);
-
-    tbl_list();
-  }
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //
-  //
-  $('input[name=text]').on('keypress', function(e) {
-    if (e.keyCode != 13)
-      return;
-
-    search();
-  });
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	検索条件のクリア
-  //
-  $('button[name=clear]').click(function() {
-    ClearDom('#query');
-
-    $('select[name=SearchDateType]').val('1');
-  })
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //  新規ボタン押下
-  //
-  $("button[name='new']").click(function() {
-    window.open("./111_staff_d.php?shop_id=" + getParm('shop_id'));
-    return false;
-  })
-
-
-
-  //------------------------------------------------------------------------
-  //
-  // 一覧読み込み
-  //
-  function tbl_list() {
-    $("#tbl-list").attr('processing', 1);
-    var offset = parseInt($("#tbl-list").attr('offset'));
-
-    // if (offset < 0)
-    //     return;
-
-    var p = GetFromDom('#query');
-    p['offset'] = offset;
-
-    if (offset <= 0)
-      $('#tbl-list tbody').empty();
-
-    Api('110_staff/staff_list', p,
-      function(ret) {
-
-        var cnt = ret['rows'].length;
-
-        if (ret['all_cnt'] != null)
-          $('#list_cnt').text(ret['all_cnt']);
-
-        $.each(ret['rows'], function(index, r) {
-          var $tr = $('#tbl-list thead tr:nth-child(2)').clone();
-          $tr.attr('StaffId', r['StaffId']);
-
-          SetToDom($tr, r);
-
-          $('#tbl-list tbody').append($tr);
-
-        });
-
-        if (cnt > 0) {
-          $('#tbl-list').attr('offset', offset + cnt);
-        } else {
-          $('#tbl-list').attr('offset', -1);
-
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()) // use the element's text as the event title
         }
 
-        $('#tbl-list tbody tr').show();
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject)
 
-        $("#tbl-list").attr('processing', 0);
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 1070,
+          revert: true, // will cause the event to go back to its
+          revertDuration: 0 //  original position after the drag
+        })
 
-        RecalcTableSize();
-      }
-    );
-
-  }
-
-
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	スクロール、リサイズの表示（一覧の順次読み込み）
-  //
-  $(window).on("resize", RecalcTableSize);
-
-  $('button[data-card-widget=collapse]').click(function() {
-    setInterval(RecalcTableSize, 1000);
-  });
-
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	一覧テーブルサイズ再設定
-  //
-  function RecalcTableSize() {
-    var h = $(window).height() - $('#list-base').offset().top - 30;
-    if (h > 0) {
-      $('#list-base').css('height', h);
-    }
-  }
-
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	一覧テーブルのリサイズスクロール
-  //
-  $('#list-base').on("load scroll resize", function() {
-
-    if (($('#tbl-list').height() * 0.7) < $('#list-base').scrollTop()) {
-
-      if ($("#tbl-list").attr('offset') != -1) {
-        if ($('#tbl-list').attr('processing') != 1)
-          tbl_list();
-      }
-
+      })
     }
 
-  });
+    ini_events($('#external-events div.external-event'))
 
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //  詳細情報
-  //
-  $(document).on('click', '#tbl-list div.detail', function() {
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date()
+    var d = date.getDate(),
+      m = date.getMonth(),
+      y = date.getFullYear()
 
-    var id = $(this).closest('tr').attr('StaffId')
-    window.open("../100_shop/111_staff_d.php?staff_id=" + id, '_blank');
+    var Calendar = FullCalendar.Calendar;
+    var Draggable = FullCalendarInteraction.Draggable;
 
-  })
+    var containerEl = document.getElementById('external-events');
+    var checkbox = document.getElementById('drop-remove');
+    var calendarEl = document.getElementById('calendar');
 
-  //////////////////////////////////////////////////////////////////////////
-  //
-  //	一覧テーブルのリサイズスクロール
-  //
-  $('#tbl-list').on("click", "button[name=staff]", function() {
-    var id = $(this).closest('tr').attr('StaffId')
-    window.open("120_shift.php?staff_id=" + id, '_blank');
+    // initialize the external events
+    // -----------------------------------------------------------------
 
+    new Draggable(containerEl, {
+      itemSelector: '.external-event',
+      eventData: function(eventEl) {
+        console.log(eventEl);
+        return {
+          title: eventEl.innerText,
+          backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+          borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
+          textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
+        };
+      }
+    });
+
+    var calendar = new Calendar(calendarEl, {
+      plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid'],
+      locale: 'js',
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      'themeSystem': 'bootstrap',
+      //Random default events
+      // events    : [
+      //   {
+      //     title          : 'All Day Event',
+      //     start          : new Date(y, m, 1),
+      //     backgroundColor: '#f56954', //red
+      //     borderColor    : '#f56954', //red
+      //     allDay         : true
+      //   },
+      //   {
+      //     title          : 'Long Event',
+      //     start          : new Date(y, m, d - 5),
+      //     end            : new Date(y, m, d - 2),
+      //     backgroundColor: '#f39c12', //yellow
+      //     borderColor    : '#f39c12' //yellow
+      //   },
+      //   {
+      //     title          : 'Meeting',
+      //     start          : new Date(y, m, d, 10, 30),
+      //     allDay         : false,
+      //     backgroundColor: '#0073b7', //Blue
+      //     borderColor    : '#0073b7' //Blue
+      //   },
+      //   {
+      //     title          : 'Lunch',
+      //     start          : new Date(y, m, d, 12, 0),
+      //     end            : new Date(y, m, d, 14, 0),
+      //     allDay         : false,
+      //     backgroundColor: '#00c0ef', //Info (aqua)
+      //     borderColor    : '#00c0ef' //Info (aqua)
+      //   },
+      //   {
+      //     title          : 'Birthday Party',
+      //     start          : new Date(y, m, d + 1, 19, 0),
+      //     end            : new Date(y, m, d + 1, 22, 30),
+      //     allDay         : false,
+      //     backgroundColor: '#00a65a', //Success (green)
+      //     borderColor    : '#00a65a' //Success (green)
+      //   },
+      //   {
+      //     title          : 'Click for Google',
+      //     start          : new Date(y, m, 28),
+      //     end            : new Date(y, m, 29),
+      //     url            : 'http://google.com/',
+      //     backgroundColor: '#3c8dbc', //Primary (light-blue)
+      //     borderColor    : '#3c8dbc' //Primary (light-blue)
+      //   }
+      // ],
+      editable: true,
+      droppable: true, // this allows things to be dropped onto the calendar !!!
+      // drop: function(info) {
+      //   // is the "remove after drop" checkbox checked?
+      //   if (checkbox.checked) {
+      //     // if so, remove the element from the "Draggable Events" list
+      //     info.draggedEl.parentNode.removeChild(info.draggedEl);
+      //   }
+
+      //   var param = {
+      //     StaffId: getParm('staff_id'),
+      //     Start: info.date.toLocaleString('ja-JP'),
+      //   };
+      //   info.draggedEl.title = 'TEST';
+      //   Api('200_reserve_frame/add_reserve', param,
+      //     function(ret) {
+
+
+      //     }
+      //   );
+
+      // },
+      // eventDrop:function(info){
+      //   info.el.title="TEST";
+      // },
+      eventReceive: function(info) {
+
+
+        var param = {
+          StaffId: getParm('staff_id'),
+          Start: info.event.start.toLocaleString('ja-JP'),
+        };
+        Api('200_reserve_frame/add_reserve', param,
+          function(ret) {
+            info.event.setExtendedProp('EventId', ret['EventId']);
+          }
+        );
+
+      },
+      // eventClick: function(info) {
+      //   //クリックしたイベントのタイトルが取れるよ
+      //   alert('Clicked on: ' + info.event.title);
+      // },
+      eventDragStop: function(info) {
+
+      },
+      eventDragStart: function(info){
+        console.log(info);
+      },
+      eventChange: function(info){
+        console.log(info);
+      },
+      eventSet: function(info){
+        console.log(info);
+      },
+
+      eventResizeStop: function(info){
+        console.log(info);
+      },
+
+      eventDrop: function(info){
+        //クリックしたイベントのタイトルが取れるよ
+        var ev = calendar.getEventById(info.event.id);
+        var param = {
+          StaffId: getParm('staff_id'),
+          EventId: info.event.extendedProps.EventId,
+          Start: info.event.start.toLocaleString('ja-JP'),
+          End: info.event.end == null ? (null):(info.event.end.toLocaleString('ja-JP')),
+        };
+        Api('200_reserve_frame/update_reserve', param,
+          function(ret) {
+          }
+        );
+        console.log(info);
+      },
+
+      slotDuration: '00:10:00'
+    });
+
+    calendar.render();
+    // $('#calendar').fullCalendar()
 
   });
 </script>
