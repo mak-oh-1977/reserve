@@ -265,6 +265,7 @@
         var param = {
           StaffId: getParm('staff_id'),
           Start: info.event.start.toLocaleString('ja-JP'),
+          End: info.event.end.toLocaleString('ja-JP'),
         };
         Api('200_reserve_frame/add_reserve', param,
           function(ret) {
@@ -280,32 +281,31 @@
       eventDragStop: function(info) {
 
       },
-      eventDragStart: function(info){
+      eventDragStart: function(info) {
         console.log(info);
       },
-      eventChange: function(info){
+      eventChange: function(info) {
         console.log(info);
       },
-      eventSet: function(info){
-        console.log(info);
-      },
-
-      eventResizeStop: function(info){
+      eventSet: function(info) {
         console.log(info);
       },
 
-      eventDrop: function(info){
+      eventResizeStop: function(info) {
+        console.log(info);
+      },
+
+      eventDrop: function(info) {
         //クリックしたイベントのタイトルが取れるよ
         var ev = calendar.getEventById(info.event.id);
         var param = {
           StaffId: getParm('staff_id'),
           EventId: info.event.extendedProps.EventId,
           Start: info.event.start.toLocaleString('ja-JP'),
-          End: info.event.end == null ? (null):(info.event.end.toLocaleString('ja-JP')),
+          End: info.event.end == null ? (null) : (info.event.end.toLocaleString('ja-JP')),
         };
         Api('200_reserve_frame/update_reserve', param,
-          function(ret) {
-          }
+          function(ret) {}
         );
         console.log(info);
       },
@@ -315,6 +315,29 @@
 
     calendar.render();
     // $('#calendar').fullCalendar()
+
+
+    var param = {
+      StaffId: getParm('staff_id'),
+    };
+    Api('200_reserve_frame/list_reserve', param,
+      function(ret) {
+        for (var i = 0; i < ret['rows'].length; i++) {
+          var r = ret['rows'][i];
+          calendar.addEvent({
+            title: 'test',
+            start: new Date(r['Start']),
+            end: new Date(r['End']),
+            backgroundColor: '#3c8dbc',
+            borderColor: '#3c8abc',
+            allDay: r['AllDay'] == 1 ? (true):(false),
+            extendedProps:{EventId:r['EventId'],}
+          }
+
+          );
+        }
+      }
+    );
 
   });
 </script>

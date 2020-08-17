@@ -11,6 +11,24 @@ class C200_reserve_frame_api extends api
   //
   //	一覧
   //
+  function list_reserve($res, $p)
+  {
+    $sql = "
+      select 
+        EventId, Start, End, 
+        case when DATE_FORMAT(Start, '%H%i') = '0000' and End is null then 1 else 0 end AllDay,
+        Memo 
+      from 200t_reserve_frame 
+      where StaffId = ?
+      ";
+    $res = $this->dbSelect($sql, [$p['StaffId']]);
+
+    return $res;
+  }
+  //////////////////////////////////////////////////////////////////////////
+  //
+  //	追加
+  //
   function add_reserve($res, $p)
   {
     $this->dbTrans();
@@ -32,7 +50,7 @@ class C200_reserve_frame_api extends api
 
   //////////////////////////////////////////////////////////////////////////
   //
-  //	一覧
+  //	変更
   //
   function update_reserve($res, $p)
   {
