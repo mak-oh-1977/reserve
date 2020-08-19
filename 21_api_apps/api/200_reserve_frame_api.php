@@ -19,9 +19,9 @@ class C200_reserve_frame_api extends api
         case when DATE_FORMAT(Start, '%H%i') = '0000' and End is null then 1 else 0 end AllDay,
         Memo 
       from 200t_reserve_frame 
-      where StaffId = ?
+      where StaffId = ? and ((Start >= ? and End < ?) or (Start >=? and End is null))
       ";
-    $res = $this->dbSelect($sql, [$p['StaffId']]);
+    $res = $this->dbSelect($sql, [$p['StaffId'], $p['Start'], $p['End'], $p['Start']]);
 
     return $res;
   }

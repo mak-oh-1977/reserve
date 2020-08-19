@@ -231,6 +231,38 @@
         update_info(info);
       },
 
+      events: function(info, successCallback, failureCallback) {
+        console.log(info);
+        var s = new Date(info.startStr);
+        var param = {
+          StaffId: getParm('staff_id'),
+          Start: info.start.toLocaleString('ja-JP'),
+          End: info.end.toLocaleString('ja-JP')
+        };
+        Api('200_reserve_frame/list_reserve', param,
+          function(ret) {
+            var a = [];
+            for (var i = 0; i < ret['rows'].length; i++) {
+              var r = ret['rows'][i];
+
+              a.push({
+                  title: 'test',
+                  start: new Date(r['Start']),
+                  end: new Date(r['End']),
+                  backgroundColor: '#3c8dbc',
+                  borderColor: '#3c8abc',
+                  allDay: r['AllDay'] == 1 ? (true) : (false),
+                  extendedProps: {
+                    EventId: r['EventId'],
+                  }
+                }
+              );
+            }
+            successCallback(a);
+          }
+        );
+      },
+
       slotDuration: '00:10:00'
     });
 
@@ -252,29 +284,6 @@
       console.log(info);
 
     }
-    var param = {
-      StaffId: getParm('staff_id'),
-    };
-    Api('200_reserve_frame/list_reserve', param,
-      function(ret) {
-        for (var i = 0; i < ret['rows'].length; i++) {
-          var r = ret['rows'][i];
-          calendar.addEvent({
-              title: 'test',
-              start: new Date(r['Start']),
-              end: new Date(r['End']),
-              backgroundColor: '#3c8dbc',
-              borderColor: '#3c8abc',
-              allDay: r['AllDay'] == 1 ? (true) : (false),
-              extendedProps: {
-                EventId: r['EventId'],
-              }
-            }
-
-          );
-        }
-      }
-    );
 
   });
 </script>
