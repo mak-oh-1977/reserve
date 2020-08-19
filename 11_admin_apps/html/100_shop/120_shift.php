@@ -186,79 +186,8 @@
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       'themeSystem': 'bootstrap',
-      //Random default events
-      // events    : [
-      //   {
-      //     title          : 'All Day Event',
-      //     start          : new Date(y, m, 1),
-      //     backgroundColor: '#f56954', //red
-      //     borderColor    : '#f56954', //red
-      //     allDay         : true
-      //   },
-      //   {
-      //     title          : 'Long Event',
-      //     start          : new Date(y, m, d - 5),
-      //     end            : new Date(y, m, d - 2),
-      //     backgroundColor: '#f39c12', //yellow
-      //     borderColor    : '#f39c12' //yellow
-      //   },
-      //   {
-      //     title          : 'Meeting',
-      //     start          : new Date(y, m, d, 10, 30),
-      //     allDay         : false,
-      //     backgroundColor: '#0073b7', //Blue
-      //     borderColor    : '#0073b7' //Blue
-      //   },
-      //   {
-      //     title          : 'Lunch',
-      //     start          : new Date(y, m, d, 12, 0),
-      //     end            : new Date(y, m, d, 14, 0),
-      //     allDay         : false,
-      //     backgroundColor: '#00c0ef', //Info (aqua)
-      //     borderColor    : '#00c0ef' //Info (aqua)
-      //   },
-      //   {
-      //     title          : 'Birthday Party',
-      //     start          : new Date(y, m, d + 1, 19, 0),
-      //     end            : new Date(y, m, d + 1, 22, 30),
-      //     allDay         : false,
-      //     backgroundColor: '#00a65a', //Success (green)
-      //     borderColor    : '#00a65a' //Success (green)
-      //   },
-      //   {
-      //     title          : 'Click for Google',
-      //     start          : new Date(y, m, 28),
-      //     end            : new Date(y, m, 29),
-      //     url            : 'http://google.com/',
-      //     backgroundColor: '#3c8dbc', //Primary (light-blue)
-      //     borderColor    : '#3c8dbc' //Primary (light-blue)
-      //   }
-      // ],
       editable: true,
       droppable: true, // this allows things to be dropped onto the calendar !!!
-      // drop: function(info) {
-      //   // is the "remove after drop" checkbox checked?
-      //   if (checkbox.checked) {
-      //     // if so, remove the element from the "Draggable Events" list
-      //     info.draggedEl.parentNode.removeChild(info.draggedEl);
-      //   }
-
-      //   var param = {
-      //     StaffId: getParm('staff_id'),
-      //     Start: info.date.toLocaleString('ja-JP'),
-      //   };
-      //   info.draggedEl.title = 'TEST';
-      //   Api('200_reserve_frame/add_reserve', param,
-      //     function(ret) {
-
-
-      //     }
-      //   );
-
-      // },
-      // eventDrop:function(info){
-      //   info.el.title="TEST";
-      // },
       eventReceive: function(info) {
 
 
@@ -274,40 +203,32 @@
         );
 
       },
-      // eventClick: function(info) {
-      //   //クリックしたイベントのタイトルが取れるよ
-      //   alert('Clicked on: ' + info.event.title);
-      // },
+
       eventDragStop: function(info) {
+        console.log(info.event);
 
       },
       eventDragStart: function(info) {
-        console.log(info);
+        console.log(info.event);
       },
       eventChange: function(info) {
-        console.log(info);
+        console.log(info.event);
       },
       eventSet: function(info) {
-        console.log(info);
+        console.log(info.event);
       },
 
       eventResizeStop: function(info) {
-        console.log(info);
+        console.log(info.event);
+      },
+
+      eventResize: function(info) {
+        console.log(info.event);
+        update_info(info);
       },
 
       eventDrop: function(info) {
-        //クリックしたイベントのタイトルが取れるよ
-        var ev = calendar.getEventById(info.event.id);
-        var param = {
-          StaffId: getParm('staff_id'),
-          EventId: info.event.extendedProps.EventId,
-          Start: info.event.start.toLocaleString('ja-JP'),
-          End: info.event.end == null ? (null) : (info.event.end.toLocaleString('ja-JP')),
-        };
-        Api('200_reserve_frame/update_reserve', param,
-          function(ret) {}
-        );
-        console.log(info);
+        update_info(info);
       },
 
       slotDuration: '00:10:00'
@@ -316,7 +237,21 @@
     calendar.render();
     // $('#calendar').fullCalendar()
 
+    function update_info(info) {
+      //クリックしたイベントのタイトルが取れるよ
+      var ev = calendar.getEventById(info.event.id);
+      var param = {
+        StaffId: getParm('staff_id'),
+        EventId: info.event.extendedProps.EventId,
+        Start: info.event.start.toLocaleString('ja-JP'),
+        End: info.event.end == null ? (null) : (info.event.end.toLocaleString('ja-JP')),
+      };
+      Api('200_reserve_frame/update_reserve', param,
+        function(ret) {}
+      );
+      console.log(info);
 
+    }
     var param = {
       StaffId: getParm('staff_id'),
     };
@@ -325,14 +260,16 @@
         for (var i = 0; i < ret['rows'].length; i++) {
           var r = ret['rows'][i];
           calendar.addEvent({
-            title: 'test',
-            start: new Date(r['Start']),
-            end: new Date(r['End']),
-            backgroundColor: '#3c8dbc',
-            borderColor: '#3c8abc',
-            allDay: r['AllDay'] == 1 ? (true):(false),
-            extendedProps:{EventId:r['EventId'],}
-          }
+              title: 'test',
+              start: new Date(r['Start']),
+              end: new Date(r['End']),
+              backgroundColor: '#3c8dbc',
+              borderColor: '#3c8abc',
+              allDay: r['AllDay'] == 1 ? (true) : (false),
+              extendedProps: {
+                EventId: r['EventId'],
+              }
+            }
 
           );
         }
